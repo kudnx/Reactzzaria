@@ -1,75 +1,34 @@
-import React, { useState, useContext } from 'react'
+import React, { Suspense } from 'react'
 import styled from 'styled-components'
-import { AppBar, Grid, Toolbar as MaterialToolbar, IconButton, Typography, Menu, MenuItem, withStyles } from '@material-ui/core'
-import { AccountCircle } from '@material-ui/icons'
-import logo from '../../images/logo-react-zzaria.svg'
-import { AuthContext } from '../../contexts/auth'
+import { Switch, Route } from 'react-router-dom'
+import { withStyles } from '@material-ui/core'
 import t from 'prop-types'
+import Header from './header'
+import { HOME, CHOOSE_PIZZA_FLAVOURS } from '../../routes'
 
-const Main = () => {
-  const [anchorElement, setAnchorElement] = useState(null)
-  const { userInfo, logout } = useContext(AuthContext)
-  const userName = userInfo.user.displayName.split(' ')[0]
+const ChoosePizzaSize = React.lazy(() => import('../choose-pizza-size'))
+const ChoosePizzaFlavours = React.lazy(() => import('../choose-pizza-flavours'))
 
-  const handleOpenMenu = (e) => {
-    setAnchorElement(e.target)
-  }
+const Main = () => (
+  <>
+    <Header />
 
-  const handleClose = () => {
-    setAnchorElement(null)
-  }
+    <Spacer />
 
-  return (
-    <>
-      <AppBar>
-        <Toolbar>
-          <LogoContainer>
-            <img style={{ width: '30%' }} src={logo} alt='reactzzaria logo' />
-          </LogoContainer>
-          <Typography color='inherit'>Olá {userName}</Typography>
-          <IconButton color='inherit' onClick={handleOpenMenu}>
-            <AccountCircle />
-          </IconButton>
-          <Menu open={!!anchorElement} onClose={handleClose} anchorEl={anchorElement}>
-            <MenuItem onClick={logout} open>Sair</MenuItem>
-          </Menu>
-        </Toolbar>
-      </AppBar>
-
-      <Spacer />
-
-      <Content>
-        <Grid container justify='center'>
-          <Grid item>
-            <Typography variant='h4'>
-              O que vai ser hoje {userName}?
-            </Typography>
-          </Grid>
-        </Grid>
-      </Content>
-    </>
-  )
-}
-
-const Toolbar = styled(MaterialToolbar)`
-  margin: 0 auto;
-  max-width: 960px;
-  width: 100%;
-`
-
-const LogoContainer = styled.div`
-  flex-grow: 1;
-`
+    <Content>
+      <Suspense fallback='Loading...'>
+        <Switch>
+          <Route path={HOME} exact component={ChoosePizzaSize} />
+          <Route path={CHOOSE_PIZZA_FLAVOURS} exact component={ChoosePizzaFlavours} />
+        </Switch>
+      </Suspense>
+    </Content>
+  </>
+)
 
 const Content = styled.main`
   padding: 20px;
 `
-
-const style = (theme) => {
-  return {
-    main: theme.mixins.toolbar
-  }
-}
 
 const SpacerWrapper = ({ classes }) => (
   <div className={classes.main} />
@@ -77,6 +36,12 @@ const SpacerWrapper = ({ classes }) => (
 
 SpacerWrapper.propTypes = {
   classes: t.object
+}
+
+const style = (theme) => {
+  return {
+    main: theme.mixins.toolbar
+  }
 }
 
 const Spacer = withStyles(style)(SpacerWrapper)
