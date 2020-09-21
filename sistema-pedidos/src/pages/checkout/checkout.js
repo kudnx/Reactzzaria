@@ -1,13 +1,21 @@
 import React from 'react'
-import t from 'prop-types'
 import { Content, Title as UiTitle, OrderInfo } from '../../ui'
-import { Grid, Paper, TextField as MaterialTextField, Button } from '@material-ui/core'
+import { Grid, Paper, Button } from '@material-ui/core'
 import styled from 'styled-components'
-import { CHECKOUT_CONFIRMATION } from '../../routes'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import FooterCheckout from './footer-checkout'
+import { CHECKOUT_CONFIRMATION, HOME } from '../../routes'
+import { useOrder } from '../../hooks'
+import FormAddress from './form-address'
+import TextField from './text-field'
 
 function Checkout () {
+  const { order } = useOrder()
+
+  if (!order.pizzas.length) {
+    return <Redirect to={HOME} />
+  }
+
   return (
     <>
       <Content>
@@ -15,21 +23,7 @@ function Checkout () {
           <Grid item xs={12} md={6}>
             <Title>Qual o endereço para entrega?</Title>
             <PaperContainer>
-              <Grid container spacing={2} >
-                <label>CEP<TextField xs={4} autoFocus /></label>
-
-                <Grid item xs={8} />
-
-                <label>Rua<TextField xs={9} /></label>
-
-                <label>Número<TextField xs={3} /></label>
-
-                <label>Complemento<TextField xs={12} /></label>
-
-                <label>Cidade<TextField xs={9} /></label>
-
-                <label>Estado<TextField xs={3} /></label>
-              </Grid>
+              <FormAddress />
             </PaperContainer>
 
             <Title>Qual o seu telefone?</Title>
@@ -41,34 +35,16 @@ function Checkout () {
           <Grid container direction='column' item xs={12} md={6}>
             <Title>Informações do seu pedido:</Title>
             <PaperContainer>
-              <OrderInfo />
+              <OrderInfo showOptions />
             </PaperContainer>
           </Grid>
         </Grid>
       </Content>
 
       <FooterCheckout>
-        <Button variant='contained' color='primary' component={Link} to={CHECKOUT_CONFIRMATION} >Confirmar dados</Button>
+        <Button variant='contained' color='primary' component={Link} to={CHECKOUT_CONFIRMATION} >Confirmar pedido</Button>
       </FooterCheckout>
     </>
-  )
-}
-
-TextField.propTypes = {
-  autoFocus: t.bool,
-  xs: t.number
-}
-
-function TextField (xs, autoFocus, ...props) {
-  return (
-    <Grid item xs={xs}>
-      <MaterialTextField
-        variant='outlined'
-        inputProps={{
-          autoFocus
-        }}
-        FullWidth {...props} />
-    </Grid>
   )
 }
 

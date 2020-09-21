@@ -1,4 +1,6 @@
+// import React, { useState, useEffect } from 'react'
 import React from 'react'
+// import { useAuth, useCollection } from '../../hooks'
 import { useAuth } from '../../hooks'
 import styled from 'styled-components'
 import { Grid, Card, Typography } from '@material-ui/core'
@@ -9,6 +11,7 @@ import { singularOrPlural } from '../../utils'
 
 const ChoosePizzaSize = () => {
   const { userInfo } = useAuth()
+  // const pizzaSizes = useCollection('pizzaSizes')
 
   return (
     <Content>

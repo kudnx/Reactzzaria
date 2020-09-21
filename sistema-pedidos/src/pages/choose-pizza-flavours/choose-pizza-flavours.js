@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+// import React, { useState, useEffect } from 'react'
 import t from 'prop-types'
 import styled from 'styled-components'
 import { H3, HeaderContent, PizzasGrid, Divider, CardLink, Content, Footer } from '../../ui'
@@ -7,12 +8,22 @@ import { Redirect } from 'react-router-dom'
 import { HOME, CHOOSE_PIZZA_QUANTITY } from '../../routes'
 import pizzasFlavours from '../../fake-data/pizzas-flavours'
 import { Card as MaterialCard, Grid, Typography } from '@material-ui/core'
+// import { useCollection } from '../../hooks'
 
 const ChoosePizzaFlavours = ({ location }) => {
   const [checkboxes, setCheckBoxes] = useState(() => ({}))
+  // const pizzasFlavours = useCollection('pizzaFlavours')
 
   if (!location.state) {
     return <Redirect to={HOME} />
+  }
+
+  if (!pizzasFlavours) {
+    return 'Carregando sabores...'
+  }
+
+  if (pizzasFlavours.length === 0) {
+    return 'Não há dados.'
   }
 
   const { flavours, id } = location.state.pizzaSize

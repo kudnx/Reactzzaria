@@ -1,78 +1,98 @@
 import React from 'react'
-import { Content, H4, H6, OrderInfo, Divider as MaterialDivider } from '../../ui'
-import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Typography, Paper, Container, Button } from '@material-ui/core'
-import { useAuth, useOrder } from '../../hooks'
+import styled from 'styled-components'
+import {
+  Button,
+  Container,
+  Divider as MaterialDivider,
+  Paper,
+  Typography
+} from '@material-ui/core'
+import {
+  Content,
+  H4,
+  H6,
+  OrderInfo
+} from '../../ui'
 import FooterCheckout from '../checkout/footer-checkout'
+import { useAuth, useOrder } from '../../hooks'
 import { CHECKOUT_SUCCESS } from '../../routes'
 
 function CheckoutConfirmation () {
   const { userInfo } = useAuth()
-  const { sendOrder } = useOrder()
+  const { order, sendOrder } = useOrder()
 
   return (
     <>
       <Content>
         <Header>
-          <H4>Olá {userInfo.user.firstName}</H4>
+          <H4>Oi {userInfo.user.firstName}!</H4>
+
           <Typography>
-            Confira os seus dados antes de finalizar o pedido.
+            Confere, por favor, se está tudo certo com o seu pedido antes de finalizar?
           </Typography>
         </Header>
 
-        <Container max-Width='sm'>
+        <Container maxWidth='sm'>
           <PaperContainer>
-            <H6>
-              Seu pedido é:
-            </H6>
+            <H6>Seu pedido:</H6>
             <OrderInfo />
 
             <Divider />
 
-            <H6>Endereço de entrega:</H6>
+            <H6>Endereço para entrega:</H6>
             <Typography>
-              Rua tao shfblsbdfklbsdlfbsjdfhd
+              {order.address.address},
+              {' n'} {order.address.number},
+              {' '} {order.address.complement}<br />
+              Bairro: {order.address.district}<br />
+              CEP: {order.address.code}<br />
+              {order.address.city}/{order.address.state}
             </Typography>
 
             <Divider />
 
-            <H6>Telefone:</H6>
+            <H6>Telefone para contato:</H6>
             <Typography>
-              asdasdadasdasd
+              {order.phone}
             </Typography>
           </PaperContainer>
         </Container>
       </Content>
 
       <FooterCheckout justifyContent='center'>
-        <Button variant='contained' color='primary' size='large'
+        <Button
+          variant='contained'
+          color='primary'
+          size='large'
           component={Link}
           to={CHECKOUT_SUCCESS}
           onClick={sendOrder}
-        >Tudo certo!</Button>
+        >
+          Tudo certo!
+        </Button>
       </FooterCheckout>
     </>
   )
 }
 
-const Divider = styled(MaterialDivider)`
-  && {
-    margin: ${({ theme }) => theme.spacing(3, 0)};
-  }
-`
-
 const Header = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-bottom: ${({ theme }) => theme.spacing(3)}px;
   text-align: center;
-  margin-botton: ${({ theme }) => theme.spacing(3)}px;
 `
 
 const PaperContainer = styled(Paper)`
   && {
     padding: ${({ theme }) => theme.spacing(3)}px;
+  }
+`
+
+const Divider = styled(MaterialDivider)`
+  && {
+    margin: ${({ theme }) => theme.spacing(3, 0)};
   }
 `
 

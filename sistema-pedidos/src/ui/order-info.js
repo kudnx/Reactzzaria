@@ -4,18 +4,19 @@ import { Close } from '@material-ui/icons'
 import { singularOrPlural } from '../utils'
 import { useOrder } from '../hooks'
 import styled from 'styled-components'
+import t from 'prop-types'
 
-function OrderInfo () {
-  const { order } = useOrder()
+function OrderInfo ({ showOptions }) {
+  const { order, removePizzaFromOrder } = useOrder()
 
   return (
     <List>
-      {order.pizzas.map((pizza, index) => {
+      {order.pizzas.map((pizza) => {
         const { pizzaFlavours, pizzaSize, quantity } = pizza
         const { name, slices, flavours } = pizzaSize
 
         return (
-          <ListItem key={index}>
+          <ListItem key={pizza.id}>
             <Typography>
               <b>{quantity}</b> {'- '}
               {singularOrPlural(quantity, 'pizza', 'pizzas')} {'- '}
@@ -29,14 +30,20 @@ function OrderInfo () {
               <b>{pizzaFlavours.map(({ name }) => name).join(', ')}</b>
             </Typography>
 
-            <IconButton title='Remover' color='secondary'>
-              <Close />
-            </IconButton>
+            {showOptions && (
+              <IconButton title='Remover' color='secondary' onClick={() => removePizzaFromOrder(pizza.id)}>
+                <Close />
+              </IconButton>
+            )}
           </ListItem>
         )
       })}
     </List>
   )
+}
+
+OrderInfo.propTypes = {
+  showOptions: t.bool
 }
 
 const ListItem = styled(MaterialListItem)`

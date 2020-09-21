@@ -10,7 +10,9 @@
     "react-dom": "16.8.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.0.1",
-    "styled-components": "5.1.1"
+    "styled-components": "5.1.1",
+    "uuid": "^8.3.0",
+    "uuidv4": "^6.2.3"
   },
   "scripts": {
     "dev": "rescripts start",
