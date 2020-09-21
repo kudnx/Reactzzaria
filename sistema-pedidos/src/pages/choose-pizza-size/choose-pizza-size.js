@@ -1,18 +1,17 @@
-import React, { useContext } from 'react'
-import { AuthContext } from '../../contexts/auth'
-import { Link } from 'react-router-dom'
+import React from 'react'
+import { useAuth } from '../../hooks'
 import styled from 'styled-components'
-import { Grid, Card, CardActionArea as MaterialCardActionArea, Typography } from '@material-ui/core'
+import { Grid, Card, Typography } from '@material-ui/core'
 import pizzaSizes from '../../fake-data/pizzas-sizes'
 import { CHOOSE_PIZZA_FLAVOURS } from '../../routes'
-import { H3, H4, PizzasGrid, Divider } from '../../ui'
+import { H3, H4, PizzasGrid, Divider, CardLink, Content } from '../../ui'
 import { singularOrPlural } from '../../utils'
 
 const ChoosePizzaSize = () => {
-  const { userInfo } = useContext(AuthContext)
+  const { userInfo } = useAuth()
 
   return (
-    <>
+    <Content>
       <Grid container direction='column' alignItems='center'>
         <H3>
           O que vai ser hoje {userInfo.user.firstName}?
@@ -27,9 +26,11 @@ const ChoosePizzaSize = () => {
         {pizzaSizes.map((pizza) => (
           <Grid item key={pizza.id} xs>
             <Card>
-              <CardActionArea to={{
+              <CardLink to={{
                 pathname: CHOOSE_PIZZA_FLAVOURS,
-                state: pizza
+                state: {
+                  pizzaSize: pizza
+                }
               }}>
                 <Pizza><PizzaText>{pizza.size}cm</PizzaText></Pizza>
 
@@ -41,28 +42,18 @@ const ChoosePizzaSize = () => {
                   {pizza.flavours} {' '}
                   {singularOrPlural(pizza.flavours, 'sabor', 'sabores')}
                 </Typography>
-              </CardActionArea>
+              </CardLink>
             </Card>
           </Grid>
         ))}
       </PizzasGrid>
-    </>
+    </Content>
   )
 }
 
-const CardActionArea = styled(MaterialCardActionArea).attrs({
-  component: Link
-})`
-  min-width: 250px;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  padding: 20px 0;
-`
-
 const Pizza = styled.div`
-  border: 1px solid #ccc;
-  background: #fff;
+  border: 1px solid ${({ theme }) => theme.palette.grey.A100};
+  background: ${({ theme }) => theme.palette.common.white};
   border-radius: 50%;
   height: 200px;
   width: 200px;
@@ -74,7 +65,7 @@ const Pizza = styled.div`
 
   &::before,
   &::after {
-    background: #ccc;
+    background: ${({ theme }) => theme.palette.grey.A100};
     content: '';
     position: absolute;
     transform: rotate(45deg);
@@ -94,15 +85,17 @@ const Pizza = styled.div`
 const PizzaText = styled(Typography).attrs({
   variant: 'h5'
 })`
-  background: #fff;
-  border-radius: 50%;
-  height: 80px;
-  width: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
+  &&{
+    background: ${({ theme }) => theme.palette.common.white};
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
 `
 
 export default ChoosePizzaSize

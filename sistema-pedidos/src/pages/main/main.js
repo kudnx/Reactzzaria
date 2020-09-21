@@ -1,13 +1,16 @@
 import React, { Suspense } from 'react'
-import styled from 'styled-components'
 import { Switch, Route } from 'react-router-dom'
 import { withStyles } from '@material-ui/core'
 import t from 'prop-types'
 import Header from './header'
-import { HOME, CHOOSE_PIZZA_FLAVOURS } from '../../routes'
+import * as routes from '../../routes'
 
 const ChoosePizzaSize = React.lazy(() => import('../choose-pizza-size'))
 const ChoosePizzaFlavours = React.lazy(() => import('../choose-pizza-flavours'))
+const ChoosePizzaQuantity = React.lazy(() => import('../choose-pizza-quantity'))
+const Checkout = React.lazy(() => import('../checkout'))
+const CheckoutConfirmation = React.lazy(() => import('../checkout-confirmation'))
+const CheckoutSuccess = React.lazy(() => import('../checkout-success'))
 
 const Main = () => (
   <>
@@ -15,20 +18,18 @@ const Main = () => (
 
     <Spacer />
 
-    <Content>
-      <Suspense fallback='Loading...'>
-        <Switch>
-          <Route path={HOME} exact component={ChoosePizzaSize} />
-          <Route path={CHOOSE_PIZZA_FLAVOURS} exact component={ChoosePizzaFlavours} />
-        </Switch>
-      </Suspense>
-    </Content>
+    <Suspense fallback='Loading...'>
+      <Switch>
+        <Route path={routes.HOME} exact component={ChoosePizzaSize} />
+        <Route path={routes.CHOOSE_PIZZA_FLAVOURS} exact component={ChoosePizzaFlavours} />
+        <Route path={routes.CHOOSE_PIZZA_QUANTITY} exact component={ChoosePizzaQuantity} />
+        <Route path={routes.CHECKOUT} exact component={Checkout} />
+        <Route path={routes.CHECKOUT_CONFIRMATION} exact component={CheckoutConfirmation} />
+        <Route path={routes.CHECKOUT_SUCCESS} exact component={CheckoutSuccess} />
+      </Switch>
+    </Suspense>
   </>
 )
-
-const Content = styled.main`
-  padding: 20px;
-`
 
 const SpacerWrapper = ({ classes }) => (
   <div className={classes.main} />

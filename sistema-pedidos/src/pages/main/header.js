@@ -1,48 +1,35 @@
-import React, { useState, useContext } from 'react'
-import { AppBar, IconButton, Typography, Menu, MenuItem, Toolbar as MaterialToolbar } from '@material-ui/core'
-import { AuthContext } from '../../contexts/auth'
-import { AccountCircle } from '@material-ui/icons'
-import logo from '../../images/logo-react-zzaria.svg'
+import React from 'react'
+import t from 'prop-types'
+import HeaderCommon from './header-common'
 import styled from 'styled-components'
+import { Route, Switch } from 'react-router-dom'
+import HeaderCheckout from './header-checkout'
+import { CHECKOUT } from '../../routes'
+import { AppBar, Toolbar as MaterialToolbar } from '@material-ui/core'
 
-const Header = () => {
-  const { userInfo, logout } = useContext(AuthContext)
-  const [anchorElement, setAnchorElement] = useState(null)
-
-  const handleOpenMenu = (e) => {
-    setAnchorElement(e.target)
-  }
-
-  const handleClose = () => {
-    setAnchorElement(null)
-  }
-
+const Header = ({ location }) => {
   return (
     <AppBar>
       <Toolbar>
-        <LogoContainer>
-          <img style={{ width: '30%' }} src={logo} alt='reactzzaria logo' />
-        </LogoContainer>
-        <Typography color='inherit'>Olá {userInfo.user.firstName}</Typography>
-        <IconButton color='inherit' onClick={handleOpenMenu}>
-          <AccountCircle />
-        </IconButton>
-        <Menu open={!!anchorElement} onClose={handleClose} anchorEl={anchorElement}>
-          <MenuItem onClick={logout} open>Sair</MenuItem>
-        </Menu>
+        <Switch>
+          <Route path={CHECKOUT} component={HeaderCheckout} />
+          <Route component={HeaderCommon} />
+        </Switch>
       </Toolbar>
     </AppBar>
   )
 }
 
-const Toolbar = styled(MaterialToolbar)`
-  margin: 0 auto;
-  max-width: 960px;
-  width: 100%;
-`
+Header.propTypes = {
+  location: t.object.isRequired
+}
 
-const LogoContainer = styled.div`
-  flex-grow: 1;
+const Toolbar = styled(MaterialToolbar)`
+  &&{
+    margin: 0 auto;
+    max-width: ${({ theme }) => theme.breakpoints.values.lg}px;
+    width: 100%;
+  }
 `
 
 export default Header

@@ -1,3 +1,7 @@
 export const HOME = '/'
 export const LOGIN = '/login'
-export const CHOOSE_PIZZA_FLAVOURS = '/sabores-da-pizza'
+export const CHOOSE_PIZZA_FLAVOURS = '/escolher-sabores'
+export const CHOOSE_PIZZA_QUANTITY = '/escolher-qquantidade'
+export const CHECKOUT = '/checkout'
+export const CHECKOUT_CONFIRMATION = `${CHECKOUT}/efetuar-pedido`
+export const CHECKOUT_SUCCESS = `${CHECKOUT}/success`
